@@ -7,7 +7,8 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-
+using Steeltoe.Extensions.Configuration;
+using Steeltoe.Extensions.Configuration.CloudFoundry;
 namespace app
 {
     public class Program
@@ -25,13 +26,15 @@ namespace app
                 {
                     IHostingEnvironment env = builderContext.HostingEnvironment;
                     config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                        .AddCloudFoundry();
                 })
                 .UseIISIntegration()
                 .UseDefaultServiceProvider((context, options) =>
                 {
                     options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
                 })
+                .UseCloudFoundryHosting()
                 .UseStartup<Startup>();
     }
 }

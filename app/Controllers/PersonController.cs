@@ -1,6 +1,7 @@
 ﻿using app.Dal;
 using app.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,22 @@ namespace app.Controllers
     {
         private readonly dbManager _dbManager;
 
-        public PersonController(IOptions<ControllerSettings> settings)
+        // Original code, works OOTB with the proper environment variable 
+        //     ControllerSettings__DbConfig__DbConnectionString: mongodb+srv://odedia:O4JLBjqF5CR0f@cluster0-lozjx.gcp.mongodb.net/sampledb
+        //public PersonController(IOptions<ControllerSettings> settings)
+        //{
+        //    _dbManager = new dbManager(settings?.Value.DbConfig);
+        //}
+
+
+        public PersonController(IOptions<ControllerSettings> settings, IConfiguration conf)
         {
-            _dbManager = new dbManager(settings?.Value.DbConfig);
+            var uri = conf["vcap:services:user-provided:0:credentials:url"];
+            var db = new DB_Config();
+            db.DbConnectionString = uri;
+            db.DbName = "sampledb";
+
+            _dbManager = new dbManager(db);
         }
 
         // GET api/Person

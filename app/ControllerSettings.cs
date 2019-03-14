@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace app
 {
-    public interface IControllerSettings {
+    public interface IControllerSettings
+    {
         DB_Config DbConfig { get; set; }
     }
 

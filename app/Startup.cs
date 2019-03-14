@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Steeltoe.Extensions.Configuration;
+using Steeltoe.Extensions.Configuration.CloudFoundry;
 
 namespace app
 {
@@ -30,6 +32,7 @@ namespace app
             services
                 //.AddSingleton< IControllerSettings,ControllerSettings>()
                 .Configure<ControllerSettings>(Configuration.GetSection(_controllerSettingsKey))
+                // Add Steeltoe CloudFoundry Options to service container
                 .AddCors()
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
